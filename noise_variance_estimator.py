@@ -1,4 +1,9 @@
 """
+Name: Darren Chay Loong
+ID: 1049254
+Course: CIS*4720
+Assignment 2
+
 This algorithm implementation of the noise variance estimator metric 
 was found using this link: https://stackoverflow.com/a/25436112
 and was adjusted accordinly to fit the needs of the current program
@@ -17,16 +22,16 @@ filename = askopenfilename()
 print(filename)
 img = cv.imread(filename, 0)
 
-def estimate_noise(I):
+def estimate_noise(image):
 
-  H, W = I.shape
+  rows, cols = image.shape
 
-  M = [[1, -2, 1],
+  matrix = [[1, -2, 1],
        [-2, 4, -2],
        [1, -2, 1]]
 
-  sigma = np.sum(np.sum(np.absolute(convolve2d(I, M))))
-  sigma = sigma * math.sqrt(0.5 * math.pi) / (6 * (W-2) * (H-2))
+  sigma = np.sum(np.sum(np.absolute(convolve2d(image, matrix))))
+  sigma = sigma * math.sqrt(0.5 * math.pi) / (6 * (cols-2) * (rows-2))
 
   return sigma
 print("Noise Variance (sigma) = ",estimate_noise(img))

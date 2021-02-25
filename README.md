@@ -1,13 +1,19 @@
-### Running the programs
+# Running the programs
 
-# Pre Conditions
-Make sure that you have python and the following libraries are installed first:
-- numpy
-- scipy
-- opencv
-- matplotlib
-- tkinter
-Make sure that there is a Results folder in the same folder that you are running the algorithm
+## Pre Conditions
+- Make sure that there is a Results folder in the same folder that you are running the algorithm
+- Make sure that you have python and the following libraries are installed first:
+    - numpy
+    - scipy
+    - opencv
+    - matplotlib
+    - tkinter
 
-# Executing a filter
-To execute a filter, for example the Nagao-Matsuyama filter, type in 'python Nagao-MatsuyamaFilter.py' and select the image you want to denoise. The image will then be processed by the algorithm and a comparison image will be displayed afterwards and the processed image will also be saved in the Results folder as algorithm-name_output_original_image_name.jpg
+## Executing a filter
+To run the program, type in 'python DenoisingAlgorithms.py'. Select the image you want to denoise and then input the number of the algorithm you want to choose for denoising. The result will then be stored in the Results folder after execution
+
+Note: if you want to have a comparison of the original and denoise image next to each other after running the algorithms, uncomment the last couple of lines 
+
+## Executing the noise estimation algorithm
+To execute the estimation algorithm, run the following command: 'python noise_variance_estimator.py' and select the processed image that you want to analyze
+The value will then be output in the terminal 
