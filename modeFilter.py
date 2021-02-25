@@ -8,10 +8,11 @@ from tkinter.filedialog import askopenfilename
 from scipy import stats
 import pprint
 
-Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-print(filename)
-img = cv.imread(filename, 0) # reading image in grayscale
+# Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+# filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+# print(filename)
+# img = cv.imread(filename, 0) # reading image in grayscale
+img = cv.imread('Test images\groundTruths\eg3_impulseNoise.jpg',0)
 
 # Setting up kernel
 ind = 1
@@ -24,8 +25,8 @@ midptKernel = (int(kernel_size/2))+1
 pprint.pprint(img.shape)
 rows,cols = img.shape
 newImg = np.zeros((rows, cols), dtype=np.float32)
-for i in range(5):
-    for j in range(5):
+for i in range(rows):
+    for j in range(cols):
         # Excluding pixels that are in the border of the kernel
         if(i >= midptKernel and j >= midptKernel and i <= (rows - midptKernel) and j <= (cols - midptKernel)):
             # print("INDEX I: " + str(i) + " INDEX J: " + str(j) + " for the pixel\n")
@@ -57,41 +58,46 @@ for i in range(5):
                     # Retrieving the value of the neighbourhood at index [rowKern, colKern] relative to pixel
                     kernel[rowKern, colKern] = img[neighbourIndexI, neighbourIndexJ]
                     
+            # pprint.pprint(kernel)
+            
             # Removing the 2 furthest values from the mean of the kernel
             flatKernel = kernel.flatten()
-            meanKernel = np.mean(flatKernel)
-            print(meanKernel)
-            max1= -1
+            meanKernel = int(np.mean(flatKernel))
+            # print(flatKernel)
+            # print(meanKernel)
+            max1= flatKernel[0]
             max2 = flatKernel[0]
             indexMax1 = 0
             indexMax2 = 0
-            for i in range(flatKernel.size()):
+            for currIndex in range(len(flatKernel)):
                 # Check if currVal > max1
-                if abs(flatKernel[i] - meanKernel) > max1:
+                # print(abs(flatKernel[i] - meanKernel))
+                if abs(flatKernel[currIndex] - meanKernel) >= abs(max1 - meanKernel):
                     # Make max2 = max1
                     max2 = max1
                     indexMax2 = indexMax1
                     # Make max1 = currVal
-                    max1 = flatKernel[i]
-                    indexMax1 = i
+                    max1 = flatKernel[currIndex]
+                    indexMax1 = currIndex
                 # if currVal <= max1, check if currVal > max2
-                elif abs(flatKernel[i] - meanKernel) > max2:
-                    # Update max2 to new val if it is greater than max2
-                    max2 = flatKernel[i]
-                    indexMax1 = i
-            print("max1: " + str(max1) + " index1: " + str(indexMax1) + " max2: " + str(max2) + " index2: " + str(indexMax2) + "\n")
-            
+                else:
+                    if abs(flatKernel[currIndex] - meanKernel) >= abs(max2 - meanKernel):
+                        # Update max2 to new val if it is greater than max2
+                        max2 = flatKernel[currIndex]
+                        indexMax1 = currIndex
+            # print("max1: " + str(max1) + " index1: " + str(indexMax1) + " max2: " + str(max2) + " index2: " + str(indexMax2) + "\n")
+            newFlatKernel = np.delete(flatKernel, [indexMax1, indexMax2])
+            # print("New Kernel: " + str(newFlatKernel))
             # Finding the mode and setting this pixel's new value to the mode
-            # pprint.pprint(kernel)
-            modeKernel = stats.mode(flatKernel)
+            modeKernel = stats.mode(newFlatKernel)
             # print("MODE: " + str(modeKernel[0]))
             # pprint.pprint(stats.mode(kernel.flatten()))
             newImg.itemset((i, j), modeKernel[0])
             
 
 
-# plt.subplot(121),plt.imshow(img, cmap=cm.gray),plt.title('Original')
-# plt.xticks([]), plt.yticks([])
-# plt.subplot(122),plt.imshow(newImg, cmap=cm.gray),plt.title('Denoised')
-# plt.xticks([]), plt.yticks([])
-# plt.show()
+plt.subplot(121),plt.imshow(img, cmap=cm.gray),plt.title('Original')
+plt.xticks([]), plt.yticks([])
+plt.subplot(122),plt.imshow(newImg, cmap=cm.gray),plt.title('Denoised')
+plt.xticks([]), plt.yticks([])
+plt.show()
