@@ -24,25 +24,24 @@ import time
 # ALGORITHMS
 
 
-def meanFilter(img):
-    mean = cv.blur(img, (5, 5))
+def meanFilter(img, size):
+    mean = cv.blur(img, (size, size))
     return mean
 
 
-def medianFilter(img):
-    median = cv.medianBlur(img, 5)
+def medianFilter(img, size):
+    median = cv.medianBlur(img, size)
     return median
 
 
-def gaussianFilter(img):
-    gaussianImg = cv.GaussianBlur(img, (5, 5), 5)
+def gaussianFilter(img, size, index):
+    gaussianImg = cv.GaussianBlur(img, (size, size), index)
     return gaussianImg
 
 
-def modeFilter(img):
+def modeFilter(img, size):
     # Setting up kernel
-    ind = 1
-    kernel_size = 3 + 2 * (ind % 5)
+    kernel_size = 3 + 2 * (size % 5)
     kernel = np.zeros((kernel_size, kernel_size), dtype=np.float32)
     midptKernel = (int(kernel_size/2))+1
 
@@ -215,7 +214,7 @@ def nagaoMatsuyamaFilter(img):
 # Reading the file
 Tk().withdraw()
 filename = askopenfilename()
-print("filename", filename)
+print("filename: ", filename)
 img = cv.imread(filename, 0)  # reading image in grayscale
 
 # Check if file was selected
@@ -254,7 +253,7 @@ if algorithmNo is 1:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Mean Filter\n====================")
-    processedImage = meanFilter(img)
+    processedImage = meanFilter(img, 5)
 elif algorithmNo is 2:
 
     newFileName = 'Results/gaussian_output_' + \
@@ -262,7 +261,7 @@ elif algorithmNo is 2:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Gaussian Filter\n====================")
-    processedImage = gaussianFilter(img)
+    processedImage = gaussianFilter(img, 5, 5)
 elif algorithmNo is 3:
 
     newFileName = 'Results/median_output_' + \
@@ -270,7 +269,7 @@ elif algorithmNo is 3:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Median Filter\n====================")
-    processedImage = medianFilter(img)
+    processedImage = medianFilter(img, 5)
 elif algorithmNo is 4:
 
     newFileName = 'Results/mode_output_' + \
@@ -278,7 +277,7 @@ elif algorithmNo is 4:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Mode Filter\n====================")
-    processedImage = modeFilter(img)
+    processedImage = modeFilter(img, 5)
 else:
     newFileName = 'Results/nagao-matsuyama_output_' + \
         filenameSplit[len(filenameSplit)-1]
