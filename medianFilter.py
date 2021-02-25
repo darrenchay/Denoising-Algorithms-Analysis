@@ -9,8 +9,14 @@ Tk().withdraw() # we don't want a full GUI, so keep the root window from appeari
 filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
 print(filename)
 img = cv.imread(filename)
-# blur = cv.blur(img,(5,5))
-median = cv.medianBlur(img,5)
+filenameSplit = filename.split("/")
+print(filenameSplit)
+print(filenameSplit[len(filenameSplit)-1])
+newFileName = 'Results/median_output_' + filenameSplit[len(filenameSplit)-1]
+print(newFileName)
+
+median = cv.medianBlur(img,3)
+cv.imwrite(newFileName,median)
 plt.subplot(121),plt.imshow(img),plt.title('Original')
 plt.xticks([]), plt.yticks([])
 plt.subplot(122),plt.imshow(median),plt.title('Denoised')
