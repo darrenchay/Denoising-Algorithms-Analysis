@@ -94,6 +94,9 @@ for i in range(rows):
             # pprint.pprint(stats.mode(kernel.flatten()))
             newImg.itemset((i, j), modeKernel[0])
             
+    if i == int(rows/2):
+        print("Halfway done\n")
+            
 
 
 plt.subplot(121),plt.imshow(img, cmap=cm.gray),plt.title('Original')
