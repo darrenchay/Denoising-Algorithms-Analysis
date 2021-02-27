@@ -18,7 +18,7 @@ from scipy import stats
 # Utility Libraries
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-import pprint
+# import pprint
 import time
 
 # ALGORITHMS
@@ -39,14 +39,13 @@ def gaussianFilter(img, size, index):
     return gaussianImg
 
 
-def modeFilter(img, size):
+def modeFilter(img, kernel_size):
     # Setting up kernel
-    kernel_size = 3 + 2 * (size % 5)
     kernel = np.zeros((kernel_size, kernel_size), dtype=np.float32)
     midptKernel = (int(kernel_size/2))+1
 
     # Iterating over image
-    pprint.pprint(img.shape)
+    # pprint.pprint(img.shape)
     rows, cols = img.shape
     newImg = np.zeros((rows, cols), dtype=np.float32)
     for i in range(rows):
@@ -78,7 +77,6 @@ def modeFilter(img, size):
                         # Retrieving the value of the neighbourhood at index [rowKern, colKern] relative to pixel
                         kernel[rowKern, colKern] = img[neighbourIndexI,
                                                        neighbourIndexJ]
-
                 # pprint.pprint(kernel)
 
                 # Removing the 2 furthest values from the mean of the kernel
@@ -129,7 +127,7 @@ def nagaoMatsuyamaFilter(img):
     midptKernel = (int(kernel_size/2))+1
 
     # Iterating over image
-    pprint.pprint(img.shape)
+    # pprint.pprint(img.shape)
     rows, cols = img.shape
     # Creating new image template
     newImg = np.zeros((rows, cols), dtype=np.float32)
@@ -232,13 +230,22 @@ while int(algorithmNo) not in [1, 2, 3, 4, 5]:
     print("Gaussian Filter:\t", 2)
     print("Median Filter:\t\t", 3)
     print("Mode Filter:\t\t", 4)
-    print("Nagao-Matsuyama Filter:\t", 5)
+    print("Edge-preserving Filter:\t", 5)
     print("***************************")
-    algorithmNo = input("Enter the number of the algorithm you want to run:")
+    algorithmNo = input("Enter the number of the algorithm you want to run: ")
     if not algorithmNo.isnumeric():
         algorithmNo = 0
 
 algorithmNo = int(algorithmNo)
+
+# Setting the kernel size
+kernelSize = 0
+while int(kernelSize) <= 0:
+    kernelSize = input("Enter the size of the neighbourhood for the algorithm (does not apply for edge-preserving filter): ")
+    if not kernelSize.isnumeric():
+        kernelSize = 0
+
+kernelSize = int(kernelSize)
 
 # Saving the name of the output image file
 filenameSplit = filename.split("/")
@@ -253,7 +260,7 @@ if algorithmNo is 1:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Mean Filter\n====================")
-    processedImage = meanFilter(img, 5)
+    processedImage = meanFilter(img, kernelSize)
 elif algorithmNo is 2:
 
     newFileName = 'Results/gaussian_output_' + \
@@ -261,7 +268,7 @@ elif algorithmNo is 2:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Gaussian Filter\n====================")
-    processedImage = gaussianFilter(img, 5, 5)
+    processedImage = gaussianFilter(img, kernelSize, 5)
 elif algorithmNo is 3:
 
     newFileName = 'Results/median_output_' + \
@@ -269,7 +276,7 @@ elif algorithmNo is 3:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Median Filter\n====================")
-    processedImage = medianFilter(img, 5)
+    processedImage = medianFilter(img, kernelSize)
 elif algorithmNo is 4:
 
     newFileName = 'Results/mode_output_' + \
@@ -277,7 +284,7 @@ elif algorithmNo is 4:
     print("Output File: ", newFileName)
 
     print("====================\nRunning Mode Filter\n====================")
-    processedImage = modeFilter(img, 5)
+    processedImage = modeFilter(img, kernelSize)
 else:
     newFileName = 'Results/nagao-matsuyama_output_' + \
         filenameSplit[len(filenameSplit)-1]
