@@ -1,3 +1,16 @@
+# Content
+## DenoisingAlgorithms.py
+This program prompts the user to select an image that they would like to process. Then, they will be able to choose between 5 algorithms:
+- Mean Filter
+- Gaussian Filter
+- Median Filter
+- Mode Filter
+- Edge-preserving filter <br />
+<b>Note:</b> the mean filter did not end up being used in the experiment. <br />
+After choosing the algorithm, the user is finally prompted to choose the neighbourhood size and then the image is processed and saved in the Results folder
+
+## NoiseVarianceEstimator.py
+This program prompts the user to choose an image that they want to run the fast noise variance estimator algorithm on and the variance is then output in the terminal after being processed. 
 # Running the programs
 
 ## Pre Conditions
@@ -15,5 +28,6 @@ To run the program, type in 'python DenoisingAlgorithms.py'. You will be prompte
 Note: if you want to have a comparison of the original and denoise image next to each other after running the algorithms, uncomment the last couple of lines 
 
 ## Executing the noise estimation algorithm
-To execute the estimation algorithm, run the following command: 'python noise_variance_estimator.py' and select the processed image that you want to analyze.
+To execute the estimation algorithm, run the following command: 'python NoiseVarianceEstimator.py' and select the processed image that you want to analyze.
 The value will then be output in the terminal 
+
